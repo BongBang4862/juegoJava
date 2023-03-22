@@ -1,9 +1,13 @@
 
 export default class Robot{
 	constructor(x,y,speed,jumpSpeed,gravity,level){
+		this.moveSpeed = 5;
 		this.x = x;
 		this.y = y;
-		this.speed= speed;
+		this.speed={
+			x:this.moveSpeed,
+			y:this.moveSpeed
+		};
 		this.jumpSpeed = jumpSpeed;
 		this.gravity = gravity;
 		this.level = level;
@@ -43,7 +47,6 @@ export default class Robot{
 		this.jumpSpeed=-20;
 	}
 	stop() {
-	    this.isJumping = false;
 	    
 	  }
 	shoot(){
@@ -51,24 +54,60 @@ export default class Robot{
 	}
 	checkCollision(obstacle) {
     // Verificar si el personaje está dentro de los límites del obstáculo
-	    if (this.x + this.width > obstacle.x && 
-	        this.x < obstacle.x + obstacle.width &&
-	        this.y + this.height > obstacle.y && 
-	        this.y < obstacle.y + obstacle.height) {
-	      return true;
-	    } else {
-	      return false;
+	    const robotLeft = this.x;
+	    const robotRight = this.x + this.width;
+	    const robotTop = this.y;
+	    const robotBottom = this.y + this.height;
+	    const obstacleLeft = obstacle.x;
+	    const obstacleRight = obstacle.x + obstacle.width;
+	    const obstacleTop = obstacle.y;
+	    const obstacleBottom = obstacle.y + obstacle.height;
+
+	    const isColliding =
+	      robotLeft < obstacleRight &&
+	      robotRight > obstacleLeft &&
+	      robotTop < obstacleBottom &&
+	      robotBottom > obstacleTop;
+
+	    if (isColliding) {
+	      const fromTop = robotBottom - obstacleTop;
+	      const fromLeft = robotRight - obstacleLeft;
+	      const fromRight = obstacleRight - robotLeft;
+
+	      if (fromTop < fromLeft && fromTop < fromRight) {
+	        // El robot está tocando el obstáculo desde arriba
+	        this.y = obstacleTop - this.height;
+	        this.isOnGround = true;
+	        this.isJumping = false;
+	        this.speed.y = 0;
+	        this.speed.x = 0;
+	      } else if (fromLeft < fromTop && fromLeft < fromRight) {
+	        // El robot está tocando el obstáculo desde la izquierda
+	        this.x = obstacleLeft - this.width;
+	        this.speed.x = 0;
+	        this.speed.y = 5;
+	      } else if (fromRight < fromTop && fromRight < fromLeft) {
+	        // El robot está tocando el obstáculo desde la derecha
+	        this.x = obstacleRight;
+	        this.speed.x = 5;
+	        this.speed.x = 0;
+	      }
 	    }
-	  }
+
+    return isColliding;
+  }
+	  
 
 	handleKeyDown(event) {
-		if (event.key === "ArrowRight") {
-      		this.rightPressed = true;
-	    }
-	    if (event.key === "ArrowLeft") {
-	      this.leftPressed = true;
-
-	    }
+		 if (event.code === 'ArrowRight') {
+		    this.speed.x = this.moveSpeed;
+		    this.rightPressed=true
+		  } else if (event.code === 'ArrowLeft') {
+		    if (!this.isCollidingFromRight) { // Agregar esta comprobación
+		      this.speed.x = this.moveSpeed;
+		    	this.leftPressed=true
+		    }
+		}
 	    if (event.key === "ArrowDown") {
 	      this.down = true;
 	    }
@@ -122,14 +161,14 @@ export default class Robot{
 
     	if (this.x <= 750) {
 	      if (this.rightPressed && !this.down) {
-		      this.x += this.speed;
+		      this.x += this.speed.x;
 		      this.currentFrame=9
 			}
   		}
 
   		if (this.x>=0) {
 	      	if (this.leftPressed && !this.down) {
-		      this.x -= this.speed;
+		      this.x -= this.speed.x;
 		      this.currentFrame=9
 		      }
     	}else{
