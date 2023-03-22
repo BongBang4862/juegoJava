@@ -1,0 +1,201 @@
+function verificarColisiones() {
+  if (enemigo1.detectarColision(jugador)) {
+    jugador.perderVida();
+  }
+  
+  if (enemigo2.detectarColision(jugador)) {
+    jugador.perderVida();
+  }
+}
+
+setInterval(verificarColisiones, 1000/60); // Verifica las colisiones 60 veces por segundo
+
+function actualizar() {
+  enemigo1.mover();
+  enemigo2.mover();
+  
+  enemigo1.dibujar(contexto);
+  enemigo2.dibujar(contexto);
+}
+
+setInterval(actualizar, 1000/60); // Actualiza el juego 60 veces por segundo
+
+const enemigo1 = new Enemigo(100, 50, 5);
+const enemigo2 = new Enemigo(200, 100, 10);
+
+class Enemigo {
+  constructor(x, y, velocidad) {
+    this.x = x;
+    this.y = y;
+    this.velocidad = velocidad;
+  }
+  
+  mover() {
+    this.x += this.velocidad;
+  }
+  
+  dibujar(contexto) {
+    // Dibuja el enemigo en el contexto del juego
+  }
+  
+  detectarColision(jugador) {
+    // Detecta si hay una colisión entre el enemigo y el jugador
+  }
+}
+
+
+// function render() {
+// //   // Limpiar el lienzo
+// //   contexto.clearRect(0, 0, canvas.width, canvas.height);
+  
+// //   // Dibujar el fotograma actual
+// //   contexto.drawImage(player.ataqueFrames[currentFrame], 10, 15);
+  
+// //   // Incrementar el fotograma actual
+// //   currentFrame++;
+  
+// //   // Reiniciar la animación si hemos llegado al final de la matriz de imágenes
+// //   if (currentFrame >= player.ataqueFrames.length) {
+// //     currentFrame = 0;
+// //   }
+  
+// //   // Solicitar el siguiente fotograma de animación
+// // requestAnimationFrame(render);
+  
+// // }
+// // requestAnimationFrame(render);
+
+
+// // Definir las propiedades del jugador
+// // Crear el objeto del jugador con la información de posición y velocidad
+// const player = {
+//   x: 50,
+//   y: 500,
+//   rightPressed : false,
+//   leftPressed : false,
+//   isJumping : false,
+//   down:false,
+//   jumpSpeed :  0,
+//   gravity:0.5,
+//   level:500,
+//   speed: 5,
+//   // Array con los diferentes frames del sprite
+//   frames: [],
+//   // Índice del frame actual del sprite
+//   currentFrame: 0,
+//   // Contador para controlar la velocidad de la animación
+//   frameCount: 0,
+//   jump: function(){
+//    this.isJumping = true;
+//    this.jumpSpeed = -20;
+
+//   },
+//   // Función para actualizar la posición del jugador
+//   update: function() {
+//    if (this.down) {
+//       this.currentFrame=6
+//     }else{
+//      this.currentFrame=0
+//     }
+//     // Mover al jugador hacia la derecha si se pulsa la tecla derecha
+//     if (this.x <= 750) {
+//       if (this.rightPressed && !this.down) {
+//       this.x += this.speed;
+//       this.currentFrame=9
+//     }
+//   }
+//     // Mover al jugador hacia la izquierda si se pulsa la tecla izquierda
+    
+//       if (this.x>=0) {
+//        if (this.leftPressed && !this.down) {
+//        this.x -= this.speed;
+//        this.currentFrame=9
+//        }
+//      }else{
+//        this.currentFrame=0
+//      }
+    
+//     // Actualizar el índice del frame actual para mostrar el siguiente frame en la animación
+//     this.frameCount++;
+//     if (this.frameCount >= 5) {
+//       this.frameCount = 0;
+//     }
+//     if (this.isJumping) {
+//       this.y += this.jumpSpeed;
+//       this.jumpSpeed += this.gravity;
+//       this.currentFrame=6;
+//       this.currentFrame=8
+//     }
+//     // Si se alcanza el suelo, detener el salto
+//     if (this.y > this.level) {
+//       this.y = this.level;
+//       this.isJumping = false;
+//        this.currentFrame=0
+//     }
+//   },
+//    handleKeyDown: function(event) {
+//     if (event.key === "ArrowRight") {
+//       this.rightPressed = true;
+//     }
+//     if (event.key === "ArrowLeft") {
+//       this.leftPressed = true;
+
+//     }
+//     if (event.key === "ArrowDown") {
+//       this.down = true;
+
+//     }
+
+//     if (event.key === "ArrowUp" && !this.isJumping) {
+//     // Saltar si no se está en el aire
+//     this.jump();
+//    }
+
+//    if (event.key === "a" ) {
+//      this.currentFrame= 7
+//    }
+//   },
+
+//   handleKeyUp: function(event) {
+//     if (event.key === "ArrowRight") {
+//       this.rightPressed = false;
+
+//     }
+//      if (event.key === "ArrowLeft") {
+//       this.leftPressed = false;
+
+//     }
+//     if (event.key === "a" ) {
+//      this.currentFrame= 0
+//    }
+//    if (event.key === "ArrowDown" ) {
+//      this.down= false
+//    }
+ 
+
+//   },
+
+//   // Función para dibujar el jugador en el canvas
+//   draw: function() {
+//     // Dibujar el frame actual del sprite en la posición del jugador
+//     ctx.drawImage(this.frames[this.currentFrame], this.x, this.y);
+//   }
+// }
+// var imagenes=[
+//  'robotfall.png',
+//  'robotgib1.png',
+//  'robotgib2.png',
+//  'robotgib3.png',
+//  'robotgib4.png',
+//  'robotgib5.png',
+//  'robotland.png',
+//  'robotshoot.png',
+//  'robothover1.png',
+//  'robothover2.png',
+//  'robotturn.png']
+// for (let i = 0; i <= imagenes.length -1 ; i++) {
+//   const img = new Image();
+//   img.src = `robotgunner/${imagenes[i]}`;
+  
+//   player.frames.push(img);
+// }
